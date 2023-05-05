@@ -37,10 +37,10 @@
 /processor:SongProcessor
 /build:Audio/SevenNationArmy.mp3
 
-#begin Backgrounds/normal.jpeg
+#begin Backgrounds/normal.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:Backgrounds/normal.jpeg
+/build:Backgrounds/normal.jpg
 
 #begin Backgrounds/contrast.jpeg
 /importer:TextureImporter
@@ -51,4 +51,9 @@
 /importer:TextureImporter
 /processor:TextureProcessor
 /build:Backgrounds/red.jpeg
+
+#begin Backgrounds/menu.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Backgrounds/menu.jpg
 
