@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using MusicBeater.Code.Controller;
@@ -15,119 +16,103 @@ namespace MusicBeater.Code.View;
 
 public class Views
 {
-    private readonly GameController _game;
+    private readonly ContentManager _content;
+    private readonly GraphicsDeviceManager _graphics;
+    private readonly GameWindow _window;
     private static SpriteBatch _spriteBatch;
     private readonly Size _windowSize;
-    public Texture2D CurrentBackground;
-    public List<Component> GameComponents;
 
+    public List<Component> MenuComponents;
     public Texture2D MenuBackground;
+    private readonly MenuDelegates _btnDelegates;
+    
     public Texture2D GameBackground;
+    public Song Song;
+    private Texture2D _whiteArea;
+    private Texture2D _limeArea;
+    private Texture2D _circle;
 
-    public Song Song; private bool isColored = false;
-    public BackgroundType BackgroundType = BackgroundType.Default;
-
-    public Views(GameController game)
+    public Views(ContentManager content, GraphicsDeviceManager graphics, GameWindow window, MenuDelegates menuDelegates)
     {
-        _game = game;
-        var graphics = new GraphicsDeviceManager(game);
-        graphics.GraphicsProfile = GraphicsProfile.HiDef;
-
-        graphics.IsFullScreen = true;
+        _content = content;
+        _graphics = graphics;
         _windowSize = new Size(1920, 1080);
-        graphics.PreferredBackBufferWidth = _windowSize.Width;
-        graphics.PreferredBackBufferHeight = _windowSize.Height;
-        graphics.ApplyChanges();
+        _window = window;
+        _btnDelegates = menuDelegates;
+
+        _graphics.GraphicsProfile = GraphicsProfile.HiDef;
+        //_graphics.IsFullScreen = true;
+        _graphics.PreferredBackBufferWidth = _windowSize.Width;
+        _graphics.PreferredBackBufferHeight = _windowSize.Height;
+        _graphics.ApplyChanges();
     }
 
     public void LoadContent()
     {
-        _spriteBatch = new SpriteBatch(_game.GraphicsDevice);
-        _game.Content.RootDirectory = "Content";
-        Song = _game.Content.Load<Song>("Audio/SevenNationArmy");
+        _spriteBatch = new SpriteBatch(_graphics.GraphicsDevice);
+        _content.RootDirectory = "Content";
+        Song = _content.Load<Song>("Audio/SevenNationArmy");
 
-
-        GameBackground = _game.Content.Load<Texture2D>("Backgrounds/normal");
-        MenuBackground = _game.Content.Load<Texture2D>("Backgrounds/menu");
-        CurrentBackground = MenuBackground;
-
+        GameBackground = _content.Load<Texture2D>("Backgrounds/normal");
+        MenuBackground = _content.Load<Texture2D>("Backgrounds/menu");
+        
         LoadButtons();
+        
+        _limeArea = new Texture2D(_graphics.GraphicsDevice, 1, 1);
+        _limeArea.SetData(new[] { Color.White });
+        
+        _whiteArea = _content.Load<Texture2D>("Assets/whiteRectangle");
+
+        _circle = _content.Load<Texture2D>("Assets/circle");
     }
 
     private void LoadButtons()
     {
-        var position = new Vector2(_game.Window.ClientBounds.Width / 2 - 62, _game.Window.ClientBounds.Height / 2 - 60);
+        var position = new Vector2(_window.ClientBounds.Width / 2 - 62, _window.ClientBounds.Height / 2 - 60);
         //var position = new Vector2(10, 10);
         var startButton =
-            new Button(_game.Content.Load<Texture2D>("Controls/Button"), _game.Content.Load<SpriteFont>("Fonts/Font"))
+            new Button(_content.Load<Texture2D>("Controls/Button"), _content.Load<SpriteFont>("Fonts/Font"))
             {
                 Position = position,
                 Text = "Start",
             };
 
-        startButton.Click += delegate { _game.Logic.StartButton_Click(); };
+        startButton.Click += _btnDelegates.StartButtonClick;
 
-        var quitButton = new Button(_game.Content.Load<Texture2D>("Controls/Button"),
-            _game.Content.Load<SpriteFont>("Fonts/Font"))
+        var quitButton = new Button(_content.Load<Texture2D>("Controls/Button"),
+            _content.Load<SpriteFont>("Fonts/Font"))
         {
             Position = position with { Y = position.Y + 50 },
             Text = "Quit",
         };
 
-        quitButton.Click += delegate { _game.Exit(); };
+        quitButton.Click += _btnDelegates.ExitButtonClick;
 
-        GameComponents = new List<Component>
+        MenuComponents = new List<Component>
         {
             startButton,
             quitButton
         };
     }
 
-    public Color OldColor = Color.White;
-    public Color CurrColor = Color.White;
-    private float _colorAmount;
-    private Color _bColor;
 
-    public void DrawGame(GameTime gameTime)
+    public void DrawGame(GameTime gameTime, Texture2D backgroundImg, Color backgroundColor, Vector2 circlePos)
     {
         _spriteBatch.Begin();
-        _bColor = Color.Lerp(OldColor, CurrColor, _colorAmount);
-        _spriteBatch.Draw(CurrentBackground, new Rectangle(0, 0, _windowSize.Width, _windowSize.Height), _bColor);
+        _spriteBatch.Draw(backgroundImg, new Rectangle(0, 0, _windowSize.Width, _windowSize.Height), backgroundColor);
+        
+        _spriteBatch.Draw(_whiteArea, new Rectangle(700, 900, 600, 50), Color.White);
+        _spriteBatch.Draw(_limeArea, new Rectangle(800, 900, 100, 50), Color.Lime);
+        _spriteBatch.Draw(_circle, circlePos, Color.White);
         _spriteBatch.End();
     }
 
-    public void AnimateBackground()
-    {
-        switch (BackgroundType)
-        {
-            case BackgroundType.FadeIn:
-            {
-                _colorAmount += 0.1f;
-                if (_colorAmount >= 1f) BackgroundType = BackgroundType.FadeOut;
-                break;
-            }
-            case BackgroundType.FadeOut:
-            {
-                if (_colorAmount <= 0f) BackgroundType = BackgroundType.Default;
-                break;
-            }
-            case BackgroundType.Default:
-            {
-                _bColor = Color.White;
-                CurrColor = Color.White;
-                break;
-            }
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
-
-    public void DrawMenu(GameTime gameTime)
+    public void DrawMenu(GameTime gameTime, Texture2D backgroundImg)
     {
         _spriteBatch.Begin();
-        _spriteBatch.Draw(CurrentBackground, new Rectangle(0, 0, _windowSize.Width, _windowSize.Height), Color.White);
+        _spriteBatch.Draw(backgroundImg, new Rectangle(0, 0, _windowSize.Width, _windowSize.Height), Color.White);
 
-        foreach (var component in GameComponents)
+        foreach (var component in MenuComponents)
             component.Draw(gameTime, _spriteBatch);
 
         _spriteBatch.End();

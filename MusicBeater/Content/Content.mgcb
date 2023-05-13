@@ -57,3 +57,14 @@
 /processor:TextureProcessor
 /build:Backgrounds/menu.jpg
 
+#begin Assets/whiteRectangle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Assets/whiteRectangle.png
+
+#begin Assets/circle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Assets/circle.png
+
+

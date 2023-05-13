@@ -1,7 +1,7 @@
-﻿namespace MusicBeater;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+namespace MusicBeater.Code.View.Controls;
 
 public abstract class Component
 {
