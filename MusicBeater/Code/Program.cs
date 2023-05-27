@@ -1,4 +1,5 @@
-﻿using MusicBeater.Code.Controller;
+﻿using MusicBeater;
+using MusicBeater.Code;
 
-using var game = new GameController();
+using var game = new MainGame();
 game.Run();

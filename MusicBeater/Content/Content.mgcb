@@ -13,12 +13,19 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Fonts/Font.spritefont
+#begin Fonts/Inter.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Fonts/Font.spritefont
+/build:Fonts/Inter.spritefont
+
+#begin Fonts/BigInter.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/BigInter.spritefont
 
 #begin Controls/Button.png
 /importer:TextureImporter
@@ -32,6 +39,18 @@
 /processorParam:TextureFormat=Color
 /build:Controls/Button.png
 
+#begin Controls/HoverButton.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Controls/HoverButton.png
+
 #begin Audio/SevenNationArmy.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
@@ -42,29 +61,25 @@
 /processor:TextureProcessor
 /build:Backgrounds/normal.jpg
 
-#begin Backgrounds/contrast.jpeg
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:Backgrounds/contrast.jpeg
-
-#begin Backgrounds/red.jpeg
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:Backgrounds/red.jpeg
-
 #begin Backgrounds/menu.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
 /build:Backgrounds/menu.jpg
 
-#begin Assets/whiteRectangle.png
+#begin Backgrounds/scores.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
-/build:Assets/whiteRectangle.png
+/build:Backgrounds/scores.jpg
+
+#begin Assets/scoresBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Assets/scoresBackground.png
 
 #begin Assets/circle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /build:Assets/circle.png
+
 
 

@@ -2,5 +2,5 @@
 
 public enum WindowState
 {
-    Menu, Game, Settings
+    Menu, Game, Scores
 }

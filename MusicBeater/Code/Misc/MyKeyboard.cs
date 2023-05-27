@@ -4,19 +4,19 @@ using Microsoft.Xna.Framework.Input;
 
 public class MyKeyboard
 {
-    static KeyboardState currentKeyState;
-    static KeyboardState previousKeyState;
+    private static KeyboardState _currentKeyState;
+    private static KeyboardState _previousKeyState;
 
-    public static KeyboardState GetState()
+    public KeyboardState GetState()
     {
-        previousKeyState = currentKeyState;
-        currentKeyState = Keyboard.GetState();
-        return currentKeyState;
+        _previousKeyState = _currentKeyState;
+        _currentKeyState = Keyboard.GetState();
+        return _currentKeyState;
     }
     
-    public static bool IsKeyPressed(Keys key, bool oneShot)
+    public bool IsKeyPressed(Keys key, bool oneShot)
     {
-        if (oneShot) return currentKeyState.IsKeyDown(key) && !previousKeyState.IsKeyDown(key);
-        return currentKeyState.IsKeyDown(key);
+        if (oneShot) return _currentKeyState.IsKeyDown(key) && !_previousKeyState.IsKeyDown(key);
+        return _currentKeyState.IsKeyDown(key);
     }
 }
