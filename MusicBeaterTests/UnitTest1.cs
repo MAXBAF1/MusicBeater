@@ -18,7 +18,7 @@ public class Tests
     }
 
     [Test]
-    public void RunGameIsBackgroundAffectWhite()
+    public void RunGameBackgroundCurrColorIsWhite()
     {
         var game = new MainGame();
         game.Run();
@@ -50,7 +50,7 @@ public class Tests
     }
 
     [Test]
-    public void StartGameBadClick()
+    public void StartGameBadClickCurrColorIsRed()
     {
         var game = new MainGame();
         game.Run();
@@ -62,7 +62,7 @@ public class Tests
     }
 
     [Test]
-    public void StartGameNiceClick()
+    public void StartGameNiceClickCurrColorIsLime()
     {
         var game = new MainGame();
         game.Run();
