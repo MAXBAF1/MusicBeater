@@ -28,7 +28,7 @@ public class Views
 
     private readonly BtnDelegates _btnDelegates;
 
-    private Rectangle _backgroundRect;
+    private readonly Rectangle _backgroundRect;
     private Texture2D _menuBackground;
     private Texture2D _gameBackground;
     private Texture2D _scoresBackground;
@@ -44,7 +44,7 @@ public class Views
         _backgroundRect = new Rectangle(0, 0, _windowSize.Width, _windowSize.Height);
 
         _graphics.GraphicsProfile = GraphicsProfile.HiDef;
-        //_graphics.IsFullScreen = true;
+        _graphics.IsFullScreen = true;
         _graphics.PreferredBackBufferWidth = _windowSize.Width;
         _graphics.PreferredBackBufferHeight = _windowSize.Height;
         _graphics.ApplyChanges();
