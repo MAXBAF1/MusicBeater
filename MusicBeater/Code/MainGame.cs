@@ -11,16 +11,16 @@ namespace MusicBeater.Code;
 public class MainGame : Game
 {
     public Model.Model Model;
-    public readonly Views Views;
-    public readonly GameController Controller;
-    
+    private readonly Views _views;
+    private readonly GameController _controller;
+
     public MainGame()
     {
         var graphics = new GraphicsDeviceManager(this);
         var menuDelegates = new BtnDelegates((_, _) => StartButtonClick(), (_, _) => Exit(), (_, _) => ExitToMenu());
-        Views = new Views(Content, graphics, Window, menuDelegates);
+        _views = new Views(Content, graphics, Window, menuDelegates);
         Model = new Model.Model();
-        Controller = new GameController();
+        _controller = new GameController();
 
         Model.WindowState = WindowState.Menu;
 
@@ -29,20 +29,20 @@ public class MainGame : Game
 
     protected override void LoadContent()
     {
-        Views.LoadContent();
+        _views.LoadContent();
         base.LoadContent();
     }
 
     protected override void Update(GameTime gameTime)
     {
-        Controller.ListenUser(Click, PauseGame);
+        _controller.ListenUser(Click, PauseGame);
 
         if (Model.WindowState == WindowState.Menu)
-            Model.UpdateMenu(gameTime, Views.MenuComponents);
+            Model.UpdateMenu(gameTime, _views.MenuComponents);
         if (Model.WindowState == WindowState.Game)
             Model.UpdateGame(gameTime);
         if (Model.WindowState == WindowState.Scores)
-            Model.UpdateScores(gameTime, Views.ScoresComponents);
+            Model.UpdateScores(gameTime, _views.ScoresComponents);
 
         base.Update(gameTime);
     }
@@ -52,13 +52,13 @@ public class MainGame : Game
         switch (Model.WindowState)
         {
             case WindowState.Menu:
-                Views.DrawMenu(gameTime);
+                _views.DrawMenu(gameTime);
                 break;
             case WindowState.Game:
-                Views.DrawGame(Model.BColorLerp, Model.PressDelta, Model.IsIdealTime, Model.ScoresData);
+                _views.DrawGame(Model.BColorLerp, Model.PressDelta, Model.IsIdealTime, Model.ScoresData);
                 break;
             case WindowState.Scores:
-                Views.DrawScores(gameTime, Model.ScoresData);
+                _views.DrawScores(gameTime, Model.ScoresData);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -67,13 +67,12 @@ public class MainGame : Game
         base.Draw(gameTime);
     }
 
-    private string _path = @"D:\Microsoft Visual Studio\repos\MusicBeater\output.txt";
 
     public void StartButtonClick()
     {
         Model.CurTiming = long.Parse(Model.IdealTimings[Model.CurTimingNumber]);
 
-        MediaPlayer.Play(Views.Song);
+        MediaPlayer.Play(_views.Song);
         Model.SongWatch.Start();
         Model.WindowState = WindowState.Game;
     }
@@ -82,7 +81,6 @@ public class MainGame : Game
     {
         if (!Model.SongWatch.IsRunning) return;
 
-        File.AppendAllText(_path, $"{Model.SongWatch.ElapsedMilliseconds}\n");
         Model.PressDelta = Model.SongWatch.ElapsedMilliseconds - Model.CurTiming;
         if (Math.Abs(Model.PressDelta) <= Code.Model.Model.Tolerance)
         {
